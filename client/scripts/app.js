@@ -3,13 +3,13 @@
 $(document).ready(function() {
   app.init();
   //console.log(window.location.search);
-  data.username = window.location.search;
+  data.username = window.location.search.replace(/^\?username=/g, '');
   //console.log(data);
   $('#submitmsg').click(function(event) {
     event.preventDefault();
     data.message = $('#msgbox').val();
     $('#msgbox').val('');
-    app.renderMessage(data.message);
+    app.renderMessage(data);
     app.send(data);
   });
 
@@ -22,7 +22,7 @@ $(document).ready(function() {
   // var html = 
   // $('#chats').append('<span>OMG IT\'s 1998!</span><br>');
   // $('#chats').append('<span>FUUUUUUUUU!</span><br>');
-  // app.fetch();
+  app.fetch();
 });
 
 let data = {
@@ -87,10 +87,15 @@ app.clearMessages = function() {
   // }
 };
 
-app.renderMessage = function(message) {
+app.renderMessage = function(data) {
+  let handle = `<div class="chat username">
+                    <strong>${data.username}:</strong><br>
+                    ${data.message}
+                </div>`;
 
   // console.log($('#chats').children().length);
-  $('#chats').append('<div class="chat">' + message + '</div>');
+  $('#chats').append(handle);
+  // $('#chats').append(handle);
   // console.log($('#chats').children().length);
 
   // $('.chat').append('<span>' + message + '</span><br>');
