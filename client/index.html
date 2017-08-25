@@ -5,8 +5,30 @@
     <title>chatterbox</title>
     <link rel="stylesheet" href="styles/styles.css">
 
+    
+  </head>
+
+  <body>
+    <div id="main">
+      <h1>chatterbox</h1>
+      <!-- Your HTML goes here! -->
+      <span>Room: </span>
+      <select class="roomSelect">
+        <option value="volvo">Lobby</option>
+      </select>
+      <form>
+        <input id="msgbox" type="text" value="" />
+        <input id="submitmsg" type="submit" value="Send" />
+        <input id="clearmsgbox" type="submit" value="Clear" />
+      </form>
+    </div>
+
+    <div id="chats"></div>
+
     <!-- dependencies -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/backbone/backbone.js"></script>
     <script>
       // YOU DO NOT NEED TO EDIT THIS CODE
       if (!/(&|\?)username=/.test(window.location.search)) {
@@ -21,12 +43,5 @@
     <!-- your scripts -->
     <script src="env/config.js"></script>
     <script src="scripts/app.js"></script>
-  </head>
-  <body>
-    <div id="main">
-      <h1>chatterbox</h1>
-      <!-- Your HTML goes here! -->
-    </div>
-    <div id="chats"></div>
   </body>
 </html>
