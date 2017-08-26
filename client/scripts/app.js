@@ -2,6 +2,7 @@
 
 $(document).ready(function() {
   // app.init();
+  
   app.fetch();
   
   //console.log(window.location.search);
@@ -21,12 +22,13 @@ $(document).ready(function() {
     event.preventDefault();
     app.clearMessages();
   });
+
+  $('#add_rm').click(function(event) {
+    var roomname = $('#rm_name').val();
+    $('#rm_name').val('');
+    app.renderRoom(roomname);
+  });
     
-  
-  // var html = 
-  // $('#chats').append('<span>OMG IT\'s 1998!</span><br>');
-  // $('#chats').append('<span>FUUUUUUUUU!</span><br>');
-  // app.fetch();
 });
 
 let data = {
@@ -34,13 +36,10 @@ let data = {
   text: 'trololo',
   roomname: ''
 };
-// let App = function() {
-//   this.server = 'http://parse.la.hackreactor.com/chatterbox/classes/messages';
-// };
+let friends = {};
 let msg = [];
 
 let app = {};
-// let app = new App
 
 app.server = 'http://parse.la.hackreactor.com/chatterbox/classes/messages';
 
@@ -80,6 +79,8 @@ app.fetch = function() {
       // msg.push(data.results[0]);
         app.renderMessage(data.results[i]);
       }
+      app.handleUsernameClick();
+      console.log(friends);
 
       
       // msg = data;
@@ -101,11 +102,6 @@ app.clearMessages = function() {
   for (var i = 0; i < node.length; i++) {
     node.remove(node.children[i]);
   }
-
-  // var node = $('.chat').children();
-  // for (var i = 0; i < node.length; i++) {
-  //   node.remove(node.children[i]);
-  // }
 };
 
 app.renderMessage = function(data) {
@@ -117,9 +113,9 @@ app.renderMessage = function(data) {
   // handle = _.escape(handle);
   let text = _.escape(data.text);
   let user = _.escape(data.username);
-  if (data.text !== undefined) {
-    // $('#chats').prepend(handle);
-    $('#chats').prepend('<div class="chat username"><strong>' + user + '</strong><br>' + text + '</div>')
+  if (data.text !== undefined && data.username !== undefined) {
+    $('#chats').prepend('<div class="chat username"><strong>' + user + 
+                        ':</strong><br>' + text + '</div>');
   }
 
   // $('.chat').append('<span>' + message + '</span><br>');
@@ -127,5 +123,19 @@ app.renderMessage = function(data) {
 };
 
 app.renderRoom = function(roomName) {
-  $('#roomSelect').append('<option>' + roomName + '</option>');
-}
+  roomName = _.escape(roomName);
+  $('#rm_select').append('<option>' + roomName + '</option>');
+};
+
+app.handleUsernameClick = function() {
+
+  $('.username').click(function(event) {
+    
+    let handle = event.currentTarget.childNodes[0].innerHTML;
+    console.log(handle);
+    if (!friends.hasOwnProperty(handle)) {
+      friends[handle] = handle;
+    }
+    console.log(friends);
+  });
+};
