@@ -1,13 +1,17 @@
 // YOUR CODE HERE:
 
 $(document).ready(function() {
-  app.init();
+  // app.init();
+  app.fetch();
+  
   //console.log(window.location.search);
+  data.username = _.escape(data.username);
   data.username = window.location.search.replace(/^\?username=/g, '');
+  
   //console.log(data);
   $('#submitmsg').click(function(event) {
     event.preventDefault();
-    data.message = $('#msgbox').val();
+    data.text = $('#msgbox').val();
     $('#msgbox').val('');
     app.renderMessage(data);
     app.send(data);
@@ -22,17 +26,18 @@ $(document).ready(function() {
   // var html = 
   // $('#chats').append('<span>OMG IT\'s 1998!</span><br>');
   // $('#chats').append('<span>FUUUUUUUUU!</span><br>');
-  app.fetch();
+  // app.fetch();
 });
 
 let data = {
   username: 'shawndrost',
   text: 'trololo',
-  roomname: '4chan'
+  roomname: ''
 };
 // let App = function() {
 //   this.server = 'http://parse.la.hackreactor.com/chatterbox/classes/messages';
 // };
+let msg = [];
 
 let app = {};
 // let app = new App
@@ -61,13 +66,29 @@ app.send = function(message) {
 };
 
 app.fetch = function() {
+  
   $.ajax({
     // This is the url you should use to communicate with the parse API server.
     url: 'http://parse.la.hackreactor.com/chatterbox/classes/messages',
     type: 'GET',
+    data: {
+      order: '-createdAt'
+    },
     success: function (data) {
       console.log(data, 'chatterbox: Message received');
+      for (var i = 0; i < data.results.length; i++) {
+      // msg.push(data.results[0]);
+        app.renderMessage(data.results[i]);
+      }
+
+      
+      // msg = data;
     },
+    // complete: function() {
+    //   setTimeout(function() {
+    //     app.fetch();
+    //   }, 1000);
+    // },
     error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
       console.error('chatterbox: Failed to get message', data);
@@ -88,15 +109,18 @@ app.clearMessages = function() {
 };
 
 app.renderMessage = function(data) {
-  let handle = `<div class="chat username">
-                    <strong>${data.username}:</strong><br>
-                    ${data.message}
-                </div>`;
-
-  // console.log($('#chats').children().length);
-  $('#chats').append(handle);
-  // $('#chats').append(handle);
-  // console.log($('#chats').children().length);
+ 
+  // let handle = `<div class="chat username">
+  //                   <strong>${data.username}:</strong><br>
+  //                   ${data.text}
+  //               </div>`;
+  // handle = _.escape(handle);
+  let text = _.escape(data.text);
+  let user = _.escape(data.username);
+  if (data.text !== undefined) {
+    // $('#chats').prepend(handle);
+    $('#chats').prepend('<div class="chat username"><strong>' + user + '</strong><br>' + text + '</div>')
+  }
 
   // $('.chat').append('<span>' + message + '</span><br>');
 
