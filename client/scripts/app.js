@@ -13,6 +13,7 @@ let data = {
 
 let App = function() {
   this.friends = {};
+  this.rooms = {};
   this.msg = [];
   this.server = 'http://parse.la.hackreactor.com/chatterbox/classes/messages';
 };
@@ -42,7 +43,7 @@ App.prototype.send = function(message) {
 };
 
 App.prototype.fetch = function() {
-  
+
   $.ajax({
     // This is the url you should use to communicate with the parse API server.
     url: 'http://parse.la.hackreactor.com/chatterbox/classes/messages',
@@ -55,10 +56,11 @@ App.prototype.fetch = function() {
       for (var i = 0; i < data.results.length; i++) {
       // msg.push(data.results[0]);
         app.renderMessage(data.results[i]);
+        app.renderRoom(data.results[i]);
       }
       app.handleUsernameClick();
+    
       console.log(this.friends);
-
       
       // msg = data;
     },
@@ -101,9 +103,21 @@ App.prototype.renderMessage = function(data) {
 
 };
 
-App.prototype.renderRoom = function(roomName) {
-  roomName = _.escape(roomName);
-  $('#rm_select').append('<option>' + roomName + '</option>');
+// App.prototype.addRoom = function(roomName) {
+  
+//   this.rooms[data.roomname] = data.roomname;
+// };
+
+App.prototype.renderRoom = function(data) {
+  
+  // for (var i = 0;)
+
+  if (data.roomname !== undefined && !this.rooms.hasOwnProperty(data.roomname)) {
+    let roomName = _.escape(data.roomname);
+    $('#rm_select').append('<option>' + roomName + '</option>');
+    this.rooms[data.roomname] = data.roomname;
+  }
+  // $('#sort').append('');
 };
 
 App.prototype.handleUsernameClick = function() {
